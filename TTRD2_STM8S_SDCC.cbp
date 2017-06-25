@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="TTRD2_STM8S_SDCC" />
+		<Option pch_mode="2" />
+		<Option compiler="sdcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/TTRD2_STM8S_SDCC" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="sdcc" />
+				<Compiler>
+					<Add option="--out-fmt-ihx" />
+					<Add option="-mstm8" />
+					<Add option="--opt-code-size" />
+					<Add option="--debug" />
+					<Add directory="inc" />
+					<Add directory="lib/inc" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/TTRD2_STM8S_SDCC" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="sdcc" />
+				<Compiler>
+					<Add option="--opt-code-size" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Unit filename="inc/heartbeat_task.h" />
+		<Unit filename="inc/key_task.h" />
+		<Unit filename="inc/main.h" />
+		<Unit filename="inc/processor.h" />
+		<Unit filename="inc/scheduler.h" />
+		<Unit filename="inc/stm8s_conf.h" />
+		<Unit filename="inc/uart_task.h" />
+		<Unit filename="inc/user.h" />
+		<Unit filename="inc/watchdog_task.h" />
+		<Unit filename="lib/inc/stm8s.h" />
+		<Unit filename="lib/inc/stm8s_adc1.h" />
+		<Unit filename="lib/inc/stm8s_adc2.h" />
+		<Unit filename="lib/inc/stm8s_awu.h" />
+		<Unit filename="lib/inc/stm8s_beep.h" />
+		<Unit filename="lib/inc/stm8s_can.h" />
+		<Unit filename="lib/inc/stm8s_clk.h" />
+		<Unit filename="lib/inc/stm8s_exti.h" />
+		<Unit filename="lib/inc/stm8s_flash.h" />
+		<Unit filename="lib/inc/stm8s_gpio.h" />
+		<Unit filename="lib/inc/stm8s_i2c.h" />
+		<Unit filename="lib/inc/stm8s_itc.h" />
+		<Unit filename="lib/inc/stm8s_iwdg.h" />
+		<Unit filename="lib/inc/stm8s_rst.h" />
+		<Unit filename="lib/inc/stm8s_spi.h" />
+		<Unit filename="lib/inc/stm8s_tim1.h" />
+		<Unit filename="lib/inc/stm8s_tim2.h" />
+		<Unit filename="lib/inc/stm8s_tim3.h" />
+		<Unit filename="lib/inc/stm8s_tim4.h" />
+		<Unit filename="lib/inc/stm8s_tim5.h" />
+		<Unit filename="lib/inc/stm8s_tim6.h" />
+		<Unit filename="lib/inc/stm8s_uart1.h" />
+		<Unit filename="lib/inc/stm8s_uart2.h" />
+		<Unit filename="lib/inc/stm8s_uart3.h" />
+		<Unit filename="lib/inc/stm8s_uart4.h" />
+		<Unit filename="lib/inc/stm8s_wwdg.h" />
+		<Unit filename="lib/src/stm8s_adc2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_awu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_beep.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_clk.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_exti.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_flash.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_gpio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_i2c.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_itc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_iwdg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_rst.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_spi.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_tim1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_tim2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_tim3.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_tim4.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_uart1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_uart3.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/src/stm8s_wwdg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/heartbeat_task.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/key_task.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/processor.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/scheduler.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/uart_task.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/user.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/watchdog_task.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
