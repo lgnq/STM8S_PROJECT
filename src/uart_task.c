@@ -532,37 +532,54 @@ void UART2_BUF_O_Send_Char(const char CHARACTER)
 }
 
 uint8_t cmd = CMD_NONE;
-uint8_t pgn[5] =
-{
-    0,
-    0,
-    0,
-    0,
-    0
-};
-
-uint8_t src[3] =
-{
-    0,
-    0,
-    0,
-};
-
-uint8_t dst[3] =
-{
-    0,
-    0,
-    0,
-};
-
-uint8_t timestamp[14];
 
 uint8_t idx = 0;
-uint8_t priority = 0;
 
 uint8_t buff[50];
 
 uint8_t state = WAIT_FOR_SOF1;
+
+void get_data_by_idx(uint8_t *msg, uint8_t idx)
+{
+    uint8_t i = 0;
+    uint8_t j = 0;
+    uint8_t n = 0;
+    uint8_t m = 0;
+    uint8_t tmp[14];
+
+    while (1)
+    {
+        switch (msg[i])
+        {
+        case ',':
+        case '#':
+            i++;
+
+            if (n == idx)
+            {
+                for (m = 0; m < j; m++)
+                    UART2_BUF_O_Write_Char_To_Buffer(tmp[m]);
+
+                return;
+            }
+            else
+            {
+                n++;
+                j = 0;
+                for (m = 0; m < 14; m++)
+                    tmp[m] = 0;
+            }
+            break;
+        default:
+            tmp[j++] = msg[i++];
+            break;
+        }
+    }
+}
+
+void parse_btfrt_data(uint8_t *msg)
+{
+}
 
 void process_msg(uint8_t cmd, uint8_t *msg, uint8_t size)
 {
@@ -571,13 +588,15 @@ void process_msg(uint8_t cmd, uint8_t *msg, uint8_t size)
     for (i = 0; i < size; i++)
         UART2_BUF_O_Write_Char_To_Buffer(msg[i]);
 
+    get_data_by_idx(msg, 12);
+
     switch (cmd)
     {
     case CMD_BTCAR:
         UART2_BUF_O_Write_String_To_Buffer("CMD_BTCAR\r\n");
         break;
     case CMD_BTFRT:
-        UART2_BUF_O_Write_String_To_Buffer("CMD_BTFRT\r\n");
+        parse_btfrt_data(msg);
         break;
     case CMD_BTSEC:
         UART2_BUF_O_Write_String_To_Buffer("CMD_BTSEC\r\n");
@@ -589,6 +608,13 @@ void process_msg(uint8_t cmd, uint8_t *msg, uint8_t size)
     }
 }
 
+/*
+  AT+BTFRT=61184,1,6,6,11,4500,1,1,1,1,1,1,1#
+  AT+BTSEC=61184,1,6,6,12,4500,1,1,1,1#
+  AT+BTCAR=61184,1,6,6,20100320064500,1,1,1,1#
+
+  AT+BTACK=1,1,1,4500#
+ */
 void protocol_update(void)
 {
     uint8_t c;
@@ -717,59 +743,24 @@ void protocol_update(void)
             if (c == '=')
             {
                 idx = 0;
-                state = WAIT_FOR_PGN;
+                state = WAIT_FOR_DATA;
             }
             else
                 state = WAIT_FOR_SOF1;
             break;
-        case WAIT_FOR_PGN:
-            if (c != ',')
-            {
-                pgn[idx++] = c;
-            }
-            else
-            {
-                idx = 0;
-                state = WAIT_FOR_SRC;
-            }
-            break;
-        case WAIT_FOR_SRC:
-            if (c != ',')
-            {
-                src[idx++] = c;
-            }
-            else
-            {
-                idx = 0;
-                state = WAIT_FOR_DST;
-            }
-            break;
-        case WAIT_FOR_DST:
-            if (c != ',')
-            {
-                dst[idx++] = c;
-            }
-            else
-            {
-                state = WAIT_FOR_PRI;
-            }
-            break;
-        case WAIT_FOR_PRI:
-            idx = 0;
-            priority = c;
-            state = WAIT_FOR_DATA;
-            break;
         case WAIT_FOR_DATA:
+            buff[idx++] = c;
+
             if (c == '#')
             {
                 state = WAIT_FOR_SOF1;
 
                 process_msg(cmd, buff, idx);
             }
-            else
-            {
-                buff[idx++] = c;
-            }
+            //else
+            //{
+            //    buff[idx++] = c;
+            //}
 
             //if (timeout)
             //    state = WAIT_FOR_SOF1;
