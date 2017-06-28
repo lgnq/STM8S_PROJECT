@@ -579,6 +579,56 @@ void get_data_by_idx(uint8_t *msg, uint8_t idx)
 
 void parse_btfrt_data(uint8_t *msg)
 {
+    uint8_t i;
+    uint8_t j;
+    uint8_t n;
+    uint8_t state = 0;
+    uint8_t tmp[20];
+
+    while (1)
+    {
+        switch (state)
+        {
+        case 0: //PGN
+            if (msg[i] == ',')
+            {
+                for (n = 0; n < j; n++)
+                {
+                    UART2_BUF_O_Write_Char_To_Buffer(tmp[n]);
+                }
+
+                j = 0;
+                i++;
+                state++;
+            }
+            else
+            {
+                tmp[j++] = msg[i++];
+            }
+            break;
+        case 1: //Source Address
+            if (msg[i] == ',')
+            {
+                for (n = 0; n < j; n++)
+                {
+                    UART2_BUF_O_Write_Char_To_Buffer(tmp[n]);
+                }
+
+                j = 0;
+                i++;
+                state++;
+            }
+            else
+            {
+                tmp[j++] = msg[i++];
+            }
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        }
+    }
 }
 
 void process_msg(uint8_t cmd, uint8_t *msg, uint8_t size)
