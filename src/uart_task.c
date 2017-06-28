@@ -539,6 +539,7 @@ uint8_t buff[50];
 
 uint8_t state = WAIT_FOR_SOF1;
 
+#if 0
 void get_data_by_idx(uint8_t *msg, uint8_t idx)
 {
     uint8_t i = 0;
@@ -576,57 +577,119 @@ void get_data_by_idx(uint8_t *msg, uint8_t idx)
         }
     }
 }
+#endif // 0
+
+int a2i(const char *str)  
+{  
+    int s = 0;  
+    bool falg = 0;  
+      
+    while(*str==' ')  
+    {  
+        str++;  
+    }  
+  
+    if (*str=='-' || *str=='+')  
+    {  
+        if (*str=='-')  
+            falg = 1;  
+        str++;  
+    }  
+  
+    while (*str>='0' && *str<='9')  
+    {  
+        s = s*10 + *str - '0';  
+        str++;
+  
+        if (s < 0)  
+        {  
+            s = 2147483647;  
+            break;  
+        }  
+    }  
+
+    return s*(falg?-1:1);  
+}  
 
 void parse_btfrt_data(uint8_t *msg)
 {
-    uint8_t i;
-    uint8_t j;
-    uint8_t n;
-    uint8_t state = 0;
-    uint8_t tmp[20];
+    uint8_t i = 0;
+    uint8_t j = 0;
+    uint8_t n = 0;
+    //uint8_t m = 0;
+    uint8_t tmp[6];
+
+    uint16_t pgn;
+    uint16_t src;
+    uint16_t dst;
+    uint8_t pri;
+    uint8_t message_identifier;
+    uint16_t battery_voltage;
 
     while (1)
     {
-        switch (state)
+        if (msg[i] == '#')
         {
-        case 0: //PGN
-            if (msg[i] == ',')
-            {
-                for (n = 0; n < j; n++)
-                {
-                    UART2_BUF_O_Write_Char_To_Buffer(tmp[n]);
-                }
+            tmp [j] = '\0';
 
-                j = 0;
-                i++;
-                state++;
-            }
-            else
-            {
-                tmp[j++] = msg[i++];
-            }
-            break;
-        case 1: //Source Address
-            if (msg[i] == ',')
-            {
-                for (n = 0; n < j; n++)
-                {
-                    UART2_BUF_O_Write_Char_To_Buffer(tmp[n]);
-                }
+            return;
+        }
+        else if (msg[i] == ',')
+        {
+            tmp[j] = '\0';
 
-                j = 0;
-                i++;
-                state++;
-            }
-            else
+            //for (m = 0; m < j; m++)
+            //{
+            //    UART2_BUF_O_Write_Char_To_Buffer(tmp[m]);
+            //}
+
+            switch (n++)
             {
-                tmp[j++] = msg[i++];
+            case 0: //PGN
+                pgn = a2i(tmp);
+                break;
+            case 1: //Source Address
+                src = a2i(tmp);
+                UART2_BUF_O_Write_Number03_To_Buffer(src);
+                break;
+            case 2: //Destination Address
+                dst = a2i(tmp);
+                break;
+            case 3: //Priority
+                pri = a2i(tmp);
+                break;
+            case 4: //Message Identifier
+                message_identifier = a2i(tmp);
+                break;
+            case 5: //Battery Voltage
+                battery_voltage = a2i(tmp);
+                break;
+            case 6: //Machine Utilization Hour Meter
+                break;
+            case 7: //DC Controller Enable Hour Meter Trigger
+                break;
+            case 8: //IC Engine Hour Meter Trigger
+                break;
+            case 9: //Boom/Platform Stowed
+                break;
+            case 10: //Over Load
+                break;
+            case 11: //Key Switch State
+                break;
+            case 12: //Footswitch
+                break;
+            case 13: //Machine Off Level
+                break;
+            default:
+                break;
             }
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
+
+            j = 0;
+            i++;
+        }
+        else
+        {
+            tmp[j++] = msg[i++];
         }
     }
 }
@@ -637,8 +700,6 @@ void process_msg(uint8_t cmd, uint8_t *msg, uint8_t size)
 
     for (i = 0; i < size; i++)
         UART2_BUF_O_Write_Char_To_Buffer(msg[i]);
-
-    get_data_by_idx(msg, 12);
 
     switch (cmd)
     {
@@ -807,10 +868,6 @@ void protocol_update(void)
 
                 process_msg(cmd, buff, idx);
             }
-            //else
-            //{
-            //    buff[idx++] = c;
-            //}
 
             //if (timeout)
             //    state = WAIT_FOR_SOF1;

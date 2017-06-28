@@ -70,6 +70,8 @@
 
 // ------ Public function prototypes -----------------------------------------
 
+int a2i(const char *str);
+
 void UART2_BUF_O_Init(uint32_t BAUD_RATE);
 void UART2_BUF_O_Update(void);
 
