@@ -611,7 +611,173 @@ int a2i(const char *str)  
     return s*(falg?-1:1);  
 }  
 
+void parse_btcar_data(uint8_t *msg)
+{
+    uint8_t i = 0;
+    uint8_t j = 0;
+    uint8_t n = 0;
+    //uint8_t m = 0;
+    uint8_t tmp[6];
+
+    uint16_t pgn;
+    uint16_t src;
+    uint16_t dst;
+    uint8_t pri;
+    uint8_t message_identifier;
+    uint16_t battery_voltage;
+
+    while (1)
+    {
+        if (msg[i] == '#')
+        {
+            tmp [j] = '\0';
+
+            return;
+        }
+        else if (msg[i] == ',')
+        {
+            tmp[j] = '\0';
+
+            //for (m = 0; m < j; m++)
+            //{
+            //    UART2_BUF_O_Write_Char_To_Buffer(tmp[m]);
+            //}
+
+            switch (n++)
+            {
+            case 0: //PGN
+                pgn = a2i(tmp);
+                break;
+            case 1: //Source Address
+                src = a2i(tmp);
+                UART2_BUF_O_Write_Number03_To_Buffer(src);
+                break;
+            case 2: //Destination Address
+                dst = a2i(tmp);
+                break;
+            case 3: //Priority
+                pri = a2i(tmp);
+                break;
+            case 4: //Message Identifier
+                message_identifier = a2i(tmp);
+                break;
+            case 5: //Battery Voltage
+                battery_voltage = a2i(tmp);
+                break;
+            case 6: //Machine Utilization Hour Meter
+                break;
+            case 7: //DC Controller Enable Hour Meter Trigger
+                break;
+            case 8: //IC Engine Hour Meter Trigger
+                break;
+            case 9: //Boom/Platform Stowed
+                break;
+            case 10: //Over Load
+                break;
+            case 11: //Key Switch State
+                break;
+            case 12: //Footswitch
+                break;
+            case 13: //Machine Off Level
+                break;
+            default:
+                break;
+            }
+
+            j = 0;
+            i++;
+        }
+        else
+        {
+            tmp[j++] = msg[i++];
+        }
+    }
+}
+
 void parse_btfrt_data(uint8_t *msg)
+{
+    uint8_t i = 0;
+    uint8_t j = 0;
+    uint8_t n = 0;
+    //uint8_t m = 0;
+    uint8_t tmp[6];
+
+    uint16_t pgn;
+    uint16_t src;
+    uint16_t dst;
+    uint8_t pri;
+    uint8_t message_identifier;
+    uint16_t battery_voltage;
+
+    while (1)
+    {
+        if (msg[i] == '#')
+        {
+            tmp [j] = '\0';
+
+            return;
+        }
+        else if (msg[i] == ',')
+        {
+            tmp[j] = '\0';
+
+            //for (m = 0; m < j; m++)
+            //{
+            //    UART2_BUF_O_Write_Char_To_Buffer(tmp[m]);
+            //}
+
+            switch (n++)
+            {
+            case 0: //PGN
+                pgn = a2i(tmp);
+                break;
+            case 1: //Source Address
+                src = a2i(tmp);
+                UART2_BUF_O_Write_Number03_To_Buffer(src);
+                break;
+            case 2: //Destination Address
+                dst = a2i(tmp);
+                break;
+            case 3: //Priority
+                pri = a2i(tmp);
+                break;
+            case 4: //Message Identifier
+                message_identifier = a2i(tmp);
+                break;
+            case 5: //Battery Voltage
+                battery_voltage = a2i(tmp);
+                break;
+            case 6: //Machine Utilization Hour Meter
+                break;
+            case 7: //DC Controller Enable Hour Meter Trigger
+                break;
+            case 8: //IC Engine Hour Meter Trigger
+                break;
+            case 9: //Boom/Platform Stowed
+                break;
+            case 10: //Over Load
+                break;
+            case 11: //Key Switch State
+                break;
+            case 12: //Footswitch
+                break;
+            case 13: //Machine Off Level
+                break;
+            default:
+                break;
+            }
+
+            j = 0;
+            i++;
+        }
+        else
+        {
+            tmp[j++] = msg[i++];
+        }
+    }
+}
+
+void parse_btsec_data(uint8_t *msg)
 {
     uint8_t i = 0;
     uint8_t j = 0;
@@ -704,13 +870,13 @@ void process_msg(uint8_t cmd, uint8_t *msg, uint8_t size)
     switch (cmd)
     {
     case CMD_BTCAR:
-        UART2_BUF_O_Write_String_To_Buffer("CMD_BTCAR\r\n");
+        parse_btcar_data(msg);
         break;
     case CMD_BTFRT:
         parse_btfrt_data(msg);
         break;
     case CMD_BTSEC:
-        UART2_BUF_O_Write_String_To_Buffer("CMD_BTSEC\r\n");
+        parse_btsec_data(msg);
         break;
     case CMD_NONE:
     default:
