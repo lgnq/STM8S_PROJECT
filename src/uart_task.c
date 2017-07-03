@@ -623,8 +623,11 @@ void parse_btcar_data(uint8_t *msg)
     uint16_t src;
     uint16_t dst;
     uint8_t pri;
-    uint8_t message_identifier;
-    uint16_t battery_voltage;
+    uint8_t timestamp[14];
+    uint8_t dc_controller_disable;
+    uint8_t ic_disable_engine_start;
+    uint8_t drive_speed_cripple;
+    uint8_t lift_speed_cripple;
 
     while (1)
     {
@@ -658,27 +661,15 @@ void parse_btcar_data(uint8_t *msg)
             case 3: //Priority
                 pri = a2i(tmp);
                 break;
-            case 4: //Message Identifier
-                message_identifier = a2i(tmp);
+            case 4: //timestamp
                 break;
-            case 5: //Battery Voltage
-                battery_voltage = a2i(tmp);
+            case 5: //DC Controller Disable
                 break;
-            case 6: //Machine Utilization Hour Meter
+            case 6: //ID Disable Engine Start
                 break;
-            case 7: //DC Controller Enable Hour Meter Trigger
+            case 7: //Drive Speed Cripple
                 break;
-            case 8: //IC Engine Hour Meter Trigger
-                break;
-            case 9: //Boom/Platform Stowed
-                break;
-            case 10: //Over Load
-                break;
-            case 11: //Key Switch State
-                break;
-            case 12: //Footswitch
-                break;
-            case 13: //Machine Off Level
+            case 8: //Lift Speed Cripple
                 break;
             default:
                 break;
@@ -790,7 +781,7 @@ void parse_btsec_data(uint8_t *msg)
     uint16_t dst;
     uint8_t pri;
     uint8_t message_identifier;
-    uint16_t battery_voltage;
+    uint16_t battery_state_of_charge;
 
     while (1)
     {
@@ -828,23 +819,15 @@ void parse_btsec_data(uint8_t *msg)
                 message_identifier = a2i(tmp);
                 break;
             case 5: //Battery Voltage
-                battery_voltage = a2i(tmp);
+                battery_state_of_charge = a2i(tmp);
                 break;
-            case 6: //Machine Utilization Hour Meter
+            case 6: //UTS Pitch
                 break;
-            case 7: //DC Controller Enable Hour Meter Trigger
+            case 7: //UTS Roll
                 break;
-            case 8: //IC Engine Hour Meter Trigger
+            case 8: //Outrigger Status
                 break;
-            case 9: //Boom/Platform Stowed
-                break;
-            case 10: //Over Load
-                break;
-            case 11: //Key Switch State
-                break;
-            case 12: //Footswitch
-                break;
-            case 13: //Machine Off Level
+            case 9: //Deck Extend Status
                 break;
             default:
                 break;
